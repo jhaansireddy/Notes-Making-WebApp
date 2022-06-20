@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-52115242-14"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-52115242-14');
+    </script>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>NoteIt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A project management Bootstrap theme by Medium Rare">
+    <link href="https://pipeline.mediumra.re/assets/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+    <link href="https://pipeline.mediumra.re/assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+  </head>
+
+  <body>
+
+    <div class="layout layout-nav-side">
+      <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+
+        <a class="navbar-brand" href="#" >
+          <h1 style="color:white;">NOTE IT</h1>
+        </a>
+        <div class="d-flex align-items-center">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="d-block d-lg-none ml-2">
+            <div class="dropdown">
+              <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                LOGOUT
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="collapse navbar-collapse flex-column" id="navbar-collapse">
+            <div>
+              <form method='POST' action='./'>
+                {% csrf_token %}
+                <div class="input-group input-group-dark input-group-round">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons">search</i>
+                    </span>
+                  </div>
+                  <input type="search" class="form-control form-control-dark" placeholder="Search" aria-label="Search app" name="search">
+                </div>
+              </form>
+                <div class="dropdown mt-2">
+                  <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="addnote">Note</a>
+                    {% comment %} <a class="dropdown-item" href="#">Tag Category</a> {% endcomment %}
+                  </div>
+                </div>
+              </div>
+              <hr>
+          <ul class="navbar-nav d-lg-block">
+
+            <li class="nav-item">
+              <a class="nav-link" href="../">All Notes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Filter</a>
+              </li>
+  
+          </ul>
+          <form method='POST' action='/'>
+            {% csrf_token %}
+            {% for i in t %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{i.name}}" value="{{i.id}}" name="filter" >
+            <label class="form-check-label nav-item" for="{{i.name}}">
+              {{i.name}}
+            </label>
+          </div>
+          {% endfor %}
+          <button class="w-100 btn btn-outline-light" type="submit" style="margin:5px;">Apply Filter</button>
+        </form>
+        </div>
+        <div class="d-none d-lg-block">
+          <div>
+            <a class="btn btn-primary" href="logout" role="button">Logout</a>
+          </div>
+        </div>
+
+      </div>
+      <div class="main-container"  style="background-image: url('static/bg.jpg')">
+        
+        <div class="container">
+          <div class="row justify-content-around mt-3 mt-lg-5">
+            <div class="col-md-9 col-lg-8">
+                
+              <div>
+                <h1 class="display-4">Add Notes</h1>
+                <span class="lead">
+                    <i>Please save note before navigating anywhwere to not lose progress. You can edit later.</i>
+                  </span>
+              </div>
+              <hr class="my-lg-4 my-3">
+              <form method='POST' action='addnote'>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label class="form-label">Select tags</label><br>
+    
+                        {% for i in t %}
+                        <input type="checkbox" class="btn-check" id="{{i.id}}" value="{{i.id}}" autocomplete="off" name="tags">
+                        <label class="btn btn-outline-primary" for="{{i.id}}">{{i.name}}</label>
+                        {% endfor %}
+    
+                      </div>
+                    <label for="noteheading" class="form-label">Title</label>
+                    <input class="form-control" id="noteheading" name="title">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="notecontent" class="form-label">Content</label>
+                    {% comment %} <textarea class="form-control" id="notecontent" rows="17"></textarea> {% endcomment %}
+                    <div>
+                        <textarea class="form-control" id="editor" rows="10" name="content">Sample</textarea>
+                    </div>
+                    <script>
+                        ClassicEditor
+                            .create( document.querySelector( '#editor' ) )
+                            .catch( error => {
+                                console.error( error );
+                            } );
+                    </script>
+                  </div>
+                  <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+                  Please save note before navigating anywhwere to not lose progress. You can edit later.
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Required vendor scripts (Do not remove) -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/bootstrap.js"></script>
+
+    <!-- Optional Vendor Scripts (Remove the plugin script here and comment initializer script out of index.js if site does not use that feature) -->
+
+    <!-- Autosize - resizes textarea inputs as user types -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/autosize.min.js"></script>
+    <!-- Flatpickr (calendar/date/time picker UI) -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/flatpickr.min.js"></script>
+    <!-- Prism - displays formatted code boxes -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/prism.js"></script>
+    <!-- Shopify Draggable - drag, drop and sort items on page -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/draggable.bundle.legacy.js"></script>
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/swap-animation.js"></script>
+    <!-- Dropzone - drag and drop files onto the page for uploading -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/dropzone.min.js"></script>
+    <!-- List.js - filter list elements -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/list.min.js"></script>
+
+    <!-- Required theme scripts (Do not remove) -->
+    <script type="text/javascript" src="https://pipeline.mediumra.re//assets/js/theme.js"></script>
+
+    <!-- This appears in the demo only - demonstrates different layouts -->
+    <style type="text/css">
+      .layout-switcher{ position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(73px); color: #fff; transition: all .35s ease; background: #343a40; border-radius: .25rem .25rem 0 0; padding: .75rem; z-index: 999; }
+            .layout-switcher:not(:hover){ opacity: .95; }
+            .layout-switcher:not(:focus){ cursor: pointer; }
+            .layout-switcher-head{ font-size: .75rem; font-weight: 600; text-transform: uppercase; }
+            .layout-switcher-head i{ font-size: 1.25rem; transition: all .35s ease; }
+            .layout-switcher-body{ transition: all .55s ease; opacity: 0; padding-top: .75rem; transform: translateY(24px); text-align: center; }
+            .layout-switcher:focus{ opacity: 1; outline: none; transform: translateX(-50%) translateY(0); }
+            .layout-switcher:focus .layout-switcher-head i{ transform: rotateZ(180deg); opacity: 0; }
+            .layout-switcher:focus .layout-switcher-body{ opacity: 1; transform: translateY(0); }
+            .layout-switcher-option{ width: 72px; padding: .25rem; border: 2px solid rgba(255,255,255,0); display: inline-block; border-radius: 4px; transition: all .35s ease; }
+            .layout-switcher-option.active{ border-color: #007bff; }
+            .layout-switcher-icon{ width: 100%; border-radius: 4px; }
+            .layout-switcher-body:hover .layout-switcher-option:not(:hover){ opacity: .5; transform: scale(0.9); }
+            @media all and (max-width: 990px){ .layout-switcher{ min-width: 250px; } }
+            @media all and (max-width: 767px){ .layout-switcher{ display: none; } }
+    </style>
+    <div class="layout-switcher" tabindex="1">
+      <div class="layout-switcher-head d-flex justify-content-between">
+        <span>Select Layout</span>
+        <i class="material-icons">arrow_drop_up</i>
+      </div>
+      <div class="layout-switcher-body">
+
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+
+</html>
