@@ -14,8 +14,8 @@
     
 
     
-
-<link href="static/bootstrap-5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+{% load static %}
+<link href={% static 'bootstrap-5.2.0/dist/css/bootstrap.min.css' %} rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
     <!-- Favicons -->
 <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -82,7 +82,7 @@
 
     
     <!-- Custom styles for this template -->
-    <link href="static/signin.css" rel="stylesheet">
+    <link href={% static 'signin.css' %} rel="stylesheet">
   </head>
   <body class="text-center" style="background-image: url('static/bg.jpg')">
     
